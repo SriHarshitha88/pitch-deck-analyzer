@@ -1,0 +1,216 @@
+document_analysis_task:
+  description: >
+    Analyze the uploaded pitch deck document and extract detailed information for each section.
+    Focus on identifying:
+    - Problem statement and market pain points
+    - Proposed solution and unique value proposition  
+    - Business model and revenue streams
+    - Market size and target audience
+    - Team background and experience
+    - Financial projections and funding requirements
+    - Current traction and milestones
+  expected_output: >
+    A comprehensive analysis report containing:
+    - Executive Summary (2-3 paragraphs)
+    - Problem Analysis with specific pain points identified
+    - Solution Overview with key features and benefits
+    - Business Model breakdown
+    - Market Analysis with TAM/SAM/SOM data
+    - Team Assessment with key member backgrounds
+    - Financial Summary with projections and funding needs
+    - Traction Metrics and achievements
+    - Scoring: Problem clarity (/10), Solution fit (/10), Market size (/10), Team strength (/10)
+  agent: structure_analyst
+  tools: []
+  output_file: "document_analysis.md"
+
+india_market_research_task:
+  description: >
+    Conduct comprehensive market research specifically for the Indian market context.
+    Research should include:
+    - Current market trends and growth projections
+    - Regulatory environment and compliance requirements
+    - Cultural and regional considerations
+    - Government policies and initiatives relevant to the sector
+    - Consumer behavior patterns in India
+    - Infrastructure and logistics considerations
+    - Payment preferences and digital adoption rates
+  expected_output: >
+    Detailed India market research report including:
+    - Market Size: Current size and 5-year growth projections
+    - Market Trends: Top 3-5 relevant trends with impact analysis
+    - Regulatory Landscape: Key regulations, licenses, and compliance requirements
+    - Cultural Insights: Regional preferences and cultural considerations
+    - Government Support: Relevant schemes, policies, and initiatives
+    - Infrastructure Analysis: Logistics, internet penetration, payment systems
+    - Recommendations: Market entry strategies and localization suggestions
+  agent: india_market_researcher
+  context: 
+    - document_analysis_task
+  tools: []
+  output_file: "india_market_research.md"
+
+competitive_analysis_task:
+  description: >
+    Analyze the competitive landscape and create detailed benchmarking comparisons.
+    Research should cover:
+    - Direct and indirect competitors in India and globally
+    - Competitor funding history and valuation
+    - Product/service comparison and differentiation
+    - Market positioning and pricing strategies
+    - Strengths and weaknesses analysis
+    - Competitive advantages and threats assessment
+  expected_output: >
+    Comprehensive competitive analysis including:
+    - Competitor Overview: List of 5-8 key competitors with brief descriptions
+    - Competitive Matrix: Detailed comparison table with features, pricing, funding
+    - Market Positioning: How each competitor positions themselves
+    - Funding Analysis: Recent funding rounds, valuations, and investor details
+    - SWOT Analysis: Strengths, weaknesses, opportunities, threats for each competitor
+    - Competitive Advantage: Unique differentiators of the analyzed company
+    - Market Gap Analysis: Opportunities in the competitive landscape
+  agent: competitive_analyst
+  context:
+    - document_analysis_task
+    - india_market_research_task
+  tools: []
+  output_file: "competitive_analysis.md"
+
+financial_analysis_task:
+  description: >
+    Analyze financial projections, unit economics, and determine appropriate valuation multiples.
+    Focus on:
+    - Revenue model validation and scalability
+    - Unit economics analysis (CAC, LTV, payback period)
+    - Financial projections review and reasonability check
+    - Funding requirement assessment
+    - Valuation analysis using comparable company method
+    - Burn rate and runway calculations
+  expected_output: >
+    Detailed financial analysis report containing:
+    - Revenue Model Analysis: Breakdown of revenue streams and scalability
+    - Unit Economics: CAC, LTV, LTV/CAC ratio, payback period calculations
+    - Financial Projections Review: 3-year forecast analysis with assumptions
+    - Funding Assessment: Amount needed, use of funds, and timeline
+    - Valuation Analysis: Comparable company multiples and suggested valuation range
+    - Financial Health: Burn rate, runway, and key financial metrics
+    - Investment Recommendation: Based on financial viability and returns potential
+  agent: financial_analyst
+  context:
+    - document_analysis_task
+    - competitive_analysis_task
+  tools: []
+  output_file: "financial_analysis.md"
+
+risk_assessment_task:
+  description: >
+    Identify and analyze potential risks across execution, financial, market, and regulatory dimensions.
+    Assess:
+    - Execution risks related to team, product development, and operations
+    - Financial risks including funding, cash flow, and market conditions
+    - Market risks such as competition, demand, and timing
+    - Regulatory and compliance risks specific to India
+    - Technology and scalability risks
+    - External factors and macro-economic risks
+  expected_output: >
+    Comprehensive risk assessment including:
+    - Risk Categories: Execution, Financial, Market, Regulatory, Technology risks
+    - Risk Matrix: Each risk rated by probability (1-5) and impact (1-5)
+    - Top 5 Critical Risks: Detailed analysis of highest priority risks
+    - Mitigation Strategies: Recommended actions to address key risks
+    - Risk Timeline: When risks are most likely to materialize
+    - Overall Risk Score: Aggregated risk rating with justification
+    - Red Flags: Any deal-breaking risks that should cause concern
+  agent: risk_analyst
+  context:
+    - document_analysis_task
+    - india_market_research_task
+  tools: []
+  output_file: "risk_assessment.md"
+
+digital_audit_task:
+  description: >
+    Conduct comprehensive audit of the company's digital presence and online strategy.
+    Evaluate:
+    - Website performance, design, and user experience
+    - Social media presence and engagement
+    - Digital marketing strategy and effectiveness
+    - Online reputation and brand perception
+    - SEO performance and search visibility
+    - Content strategy and quality
+    - Digital customer acquisition channels
+  expected_output: >
+    Digital presence audit report including:
+    - Website Analysis: Performance, design, UX, and technical assessment
+    - Social Media Audit: Platform presence, follower count, engagement rates
+    - SEO Analysis: Search rankings, keyword performance, and optimization opportunities
+    - Content Strategy: Quality and consistency of content across channels
+    - Digital Marketing: Current channels, effectiveness, and recommendations
+    - Online Reputation: Brand mentions, reviews, and sentiment analysis
+    - Digital Recommendations: Priority improvements and strategic suggestions
+    - Digital Score: Overall digital maturity rating (/100)
+  agent: digital_auditor
+  context:
+    - document_analysis_task
+  tools: []
+  output_file: "digital_audit.md"
+
+report_generation_task:
+  description: >
+    Generate a comprehensive investment analysis report following the exact format requirements.
+    Compile all previous analyses into a structured, professional report that includes:
+    - Executive summary with key findings
+    - Detailed analysis from all previous tasks
+    - Investment recommendation with clear rationale
+    - Risk assessment and mitigation strategies
+    - Implementation roadmap and next steps
+  expected_output: >
+    A complete investment analysis report formatted as follows:
+    
+    # INVESTMENT ANALYSIS REPORT
+    
+    ## EXECUTIVE SUMMARY
+    - Company overview and investment thesis
+    - Key strengths and opportunities
+    - Major risks and concerns
+    - Investment recommendation (Proceed/Proceed with Caution/Pass)
+    - Recommended funding amount and terms
+    
+    ## COMPANY ANALYSIS
+    [Include all findings from document_analysis_task]
+    
+    ## MARKET ANALYSIS
+    [Include all findings from india_market_research_task]
+    
+    ## COMPETITIVE LANDSCAPE
+    [Include all findings from competitive_analysis_task]
+    
+    ## FINANCIAL ANALYSIS
+    [Include all findings from financial_analysis_task]
+    
+    ## RISK ASSESSMENT
+    [Include all findings from risk_assessment_task]
+    
+    ## DIGITAL PRESENCE AUDIT
+    [Include all findings from digital_audit_task]
+    
+    ## INVESTMENT RECOMMENDATION
+    - Final recommendation with detailed justification
+    - Suggested investment amount and structure
+    - Key conditions and milestones
+    - Expected returns and exit timeline
+    
+    ## NEXT STEPS
+    - Due diligence checklist
+    - Key questions for management
+    - Implementation timeline
+  agent: report_generator
+  context:
+    - document_analysis_task
+    - india_market_research_task
+    - competitive_analysis_task
+    - financial_analysis_task
+    - risk_assessment_task
+    - digital_audit_task
+  tools: []
+  output_file: "investment_analysis_report.md"
