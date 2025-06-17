@@ -4,7 +4,7 @@ An AI-powered platform that analyzes pitch decks and provides comprehensive inve
 
 ## 🎥 Demo Video
 
-[![Pitch Deck Analyzer Demo](https://via.placeholder.com/800x450?text=Pitch+Deck+Analyzer+Demo)](https://your-video-link-here)
+[![Pitch Deck Analyzer Demo](https://via.placeholder.com/800x450?text=Pitch+Deck+Analyzer+Demo)](<!-- Uploading "WhatsApp Video 2025-06-17 at 1.52.45 PM.mp4"... -->)
 
 *Click the image above to watch the demo video*
 
@@ -130,8 +130,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Streamlit for the web framework
 - CrewAI for the AI agent framework
 
-## 📞 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
-
-Project Link: [https://github.com/yourusername/pitch-deck-analyzer](https://github.com/yourusername/pitch-deck-analyzer) 
