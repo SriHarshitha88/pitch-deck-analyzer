@@ -55,40 +55,29 @@ class PitchDeckCrew:
     def _initialize_llm(self):
         """Initialize LLM using CrewAI's native LLM class with proper provider syntax"""
         logger.info("Initializing LLM")
-        groq_api_key = os.getenv("GROQ_API_KEY")
-        if not groq_api_key:
-            logger.error("GROQ_API_KEY environment variable is required")
-            raise ValueError("GROQ_API_KEY environment variable is required")
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        if not openai_api_key:
+            logger.error("OPENAI_API_KEY environment variable is required")
+            raise ValueError("OPENAI_API_KEY environment variable is required")
         
-        # Set the API key in environment for LiteLLM
-        os.environ["GROQ_API_KEY"] = groq_api_key
+        # Set the API key in environment for OpenAI
+        os.environ["OPENAI_API_KEY"] = openai_api_key
         
-        # Use CrewAI's LLM class with proper provider syntax
-        models_to_try = [
-            "groq/llama3-8b-8192",        
-            "groq/llama3-70b-8192",       
-            "groq/mixtral-8x7b-32768",   
-            "groq/gemma-7b-it",           
-        ]
-        
-        for model in models_to_try:
-            try:
-                logger.info(f"Attempting to initialize model: {model}")
-                llm = LLM(
-                    model=model,
-                    temperature=0.1,
-                    max_tokens=2000,
-                    timeout=120
-                )
-                
-                logger.info(f"✅ LLM initialized successfully with {model}")
-                return llm
-            except Exception as e:
-                logger.warning(f"❌ Failed to initialize {model}: {e}")
-                continue
-        
-        logger.error("All LLM models failed to initialize")
-        raise Exception("All LLM models failed to initialize")
+        # Use CrewAI's LLM class with OpenAI
+        try:
+            logger.info("Attempting to initialize OpenAI model")
+            llm = LLM(
+                model="gpt-4-turbo-preview",  # or "gpt-3.5-turbo" for a cheaper option
+                temperature=0.1,
+                max_tokens=2000,
+                timeout=120
+            )
+            
+            logger.info("✅ LLM initialized successfully with OpenAI")
+            return llm
+        except Exception as e:
+            logger.error(f"❌ Failed to initialize OpenAI: {e}")
+            raise Exception("Failed to initialize OpenAI LLM")
 
     def _load_config(self, filename: str) -> Dict[str, Any]:
         """Load configuration from YAML file."""

@@ -1,0 +1,3 @@
+"""
+Pitch Deck Analyzer package
+""" 

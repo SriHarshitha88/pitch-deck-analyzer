@@ -3,15 +3,17 @@ import os
 import sys
 from datetime import datetime
 
+# Add the project root to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, project_root)
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from src.pitch_deck_analyzer.crew import PitchDeckCrew
 
 def check_api_keys():
     """Check if required API keys are set."""
-    if not os.getenv("GROQ_API_KEY"):
-        st.error("GROQ_API_KEY environment variable is not set!")
-        st.info("Please set your Groq API key in the .env file or environment variables.")
+    if not os.getenv("OPENAI_API_KEY"):
+        st.error("OPENAI_API_KEY environment variable is not set!")
+        st.info("Please set your OpenAI API key in the .env file or environment variables.")
         return False
     return True
 
@@ -83,30 +85,109 @@ def main():
                             'result': result
                         })
                         
-                       
                         st.success("Analysis completed!")
-                        st.subheader("Analysis Results")
                         
-                        st.text_area("Analysis Report", str(result['content']), height=400)
-                        
-                       
-                        st.write(f"**Generated at:** {result['timestamp']}")
-                        st.write(f"**Company:** {result.get('company_name', 'N/A')}")
-                        st.write(f"**Analysis Type:** {result.get('analysis_type', 'comprehensive')}")
-                        st.write(f"**Duration:** {result.get('duration_seconds', 0):.2f} seconds")
-                        
-                       
-                        if 'report_path' in result:
-                            st.write(f"**Report saved to:** {result['report_path']}")
+                        # Create a container for the report
+                        report_container = st.container()
+                        with report_container:
+                            st.markdown("""
+                                <style>
+                                .report-header {
+                                    background-color: #f0f2f6;
+                                    padding: 20px;
+                                    border-radius: 10px;
+                                    margin-bottom: 20px;
+                                }
+                                .section-header {
+                                    color: #1f77b4;
+                                    border-bottom: 2px solid #1f77b4;
+                                    padding-bottom: 5px;
+                                    margin-top: 20px;
+                                }
+                                .highlight-box {
+                                    background-color: #e6f3ff;
+                                    padding: 15px;
+                                    border-radius: 5px;
+                                    margin: 10px 0;
+                                }
+                                .risk-box {
+                                    background-color: #fff3e6;
+                                    padding: 15px;
+                                    border-radius: 5px;
+                                    margin: 10px 0;
+                                }
+                                .recommendation-box {
+                                    background-color: #e6ffe6;
+                                    padding: 15px;
+                                    border-radius: 5px;
+                                    margin: 10px 0;
+                                }
+                                </style>
+                            """, unsafe_allow_html=True)
                             
+                            # Report Header
+                            st.markdown(f"""
+                                <div class="report-header">
+                                    <h1 style="text-align: center; color: #1f77b4;">INVESTMENT ANALYSIS REPORT</h1>
+                                    <p style="text-align: center;">Generated for: {result.get('company_name', 'N/A')}</p>
+                                    <p style="text-align: center;">Date: {result['timestamp']}</p>
+                                </div>
+                            """, unsafe_allow_html=True)
                             
-                            if os.path.exists(result['report_path']):
+                            # Executive Summary
+                            st.markdown('<h2 class="section-header">EXECUTIVE SUMMARY</h2>', unsafe_allow_html=True)
+                            exec_summary = result['content'].split('## COMPANY ANALYSIS')[0]
+                            st.markdown(exec_summary)
+                            
+                            # Company Analysis
+                            st.markdown('<h2 class="section-header">COMPANY ANALYSIS</h2>', unsafe_allow_html=True)
+                            company_analysis = result['content'].split('## COMPANY ANALYSIS')[1].split('## MARKET ANALYSIS')[0]
+                            st.markdown(company_analysis)
+                            
+                            # Market Analysis
+                            st.markdown('<h2 class="section-header">MARKET ANALYSIS</h2>', unsafe_allow_html=True)
+                            market_analysis = result['content'].split('## MARKET ANALYSIS')[1].split('## COMPETITIVE LANDSCAPE')[0]
+                            st.markdown(market_analysis)
+                            
+                            # Competitive Landscape
+                            st.markdown('<h2 class="section-header">COMPETITIVE LANDSCAPE</h2>', unsafe_allow_html=True)
+                            competitive = result['content'].split('## COMPETITIVE LANDSCAPE')[1].split('## FINANCIAL ANALYSIS')[0]
+                            st.markdown(competitive)
+                            
+                            # Financial Analysis
+                            st.markdown('<h2 class="section-header">FINANCIAL ANALYSIS</h2>', unsafe_allow_html=True)
+                            financial = result['content'].split('## FINANCIAL ANALYSIS')[1].split('## RISK ASSESSMENT')[0]
+                            st.markdown(financial)
+                            
+                            # Risk Assessment
+                            st.markdown('<h2 class="section-header">RISK ASSESSMENT</h2>', unsafe_allow_html=True)
+                            risk = result['content'].split('## RISK ASSESSMENT')[1].split('## DIGITAL PRESENCE AUDIT')[0]
+                            st.markdown(f'<div class="risk-box">{risk}</div>', unsafe_allow_html=True)
+                            
+                            # Digital Presence Audit
+                            st.markdown('<h2 class="section-header">DIGITAL PRESENCE AUDIT</h2>', unsafe_allow_html=True)
+                            digital = result['content'].split('## DIGITAL PRESENCE AUDIT')[1].split('## INVESTMENT RECOMMENDATION')[0]
+                            st.markdown(digital)
+                            
+                            # Investment Recommendation
+                            st.markdown('<h2 class="section-header">INVESTMENT RECOMMENDATION</h2>', unsafe_allow_html=True)
+                            recommendation = result['content'].split('## INVESTMENT RECOMMENDATION')[1].split('## NEXT STEPS')[0]
+                            st.markdown(f'<div class="recommendation-box">{recommendation}</div>', unsafe_allow_html=True)
+                            
+                            # Next Steps
+                            st.markdown('<h2 class="section-header">NEXT STEPS</h2>', unsafe_allow_html=True)
+                            next_steps = result['content'].split('## NEXT STEPS')[1]
+                            st.markdown(next_steps)
+                            
+                            # Download button
+                            st.markdown("---")
+                            if 'report_path' in result:
                                 with open(result['report_path'], 'r', encoding='utf-8') as f:
                                     report_content = f.read()
                                 st.download_button(
-                                    label="Download Report",
+                                    label="📥 Download Full Report",
                                     data=report_content,
-                                    file_name=os.path.basename(result['report_path']),
+                                    file_name=f"{result['company_name']}_analysis_{result['timestamp']}.txt",
                                     mime="text/plain"
                                 )
                     else:
