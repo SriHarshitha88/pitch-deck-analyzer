@@ -4,7 +4,7 @@ An AI-powered platform that analyzes pitch decks and provides comprehensive inve
 
 ## 🎥 Demo Video
 
-[![Pitch Deck Analyzer Demo](https://via.placeholder.com/800x450?text=Pitch+Deck+Analyzer+Demo)](<!-- Uploading "WhatsApp Video 2025-06-17 at 1.52.45 PM.mp4"... -->)
+[![Pitch Deck Analyzer Demo](https://via.placeholder.com/800x450?text=Pitch+Deck+Analyzer+Demo)](https://github.com/user-attachments/assets/bb879af6-9d03-4fc0-91ee-f143cc00401a)
 
 *Click the image above to watch the demo video*
 
